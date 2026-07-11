@@ -1,13 +1,22 @@
 package com.phishguard.backend.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.phishguard.backend.model.UrlRequest;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api")
 public class PhishController {
 
-    @GetMapping("/api/test")
+    @GetMapping("/test")
     public String test() {
-        return "PhishGuard AI Backend Running!";
+        return "PhishGuard AI Backend Running";
+    }
+
+    @PostMapping("/check")
+    public String checkUrl(@RequestBody UrlRequest request) {
+
+        String url = request.getUrl();
+
+        return "Checking URL: " + url;
     }
 }
