@@ -1,22 +1,31 @@
 import pandas as pd
+import joblib
+
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
-import joblib
 
-
+# Load Dataset
 df = pd.read_csv("dataset/PhiUSIIL_Phishing_URL_Dataset.csv")
 
 print("Dataset Loaded Successfully!")
 
-# Remove columns that should not be used for training
-X = df.drop(columns=["FILENAME", "URL", "Domain", "Title", "label"])
+# Drop all text columns
+columns_to_drop = [
+    "FILENAME",
+    "URL",
+    "Domain",
+    "TLD",
+    "Title",
+    "label"
+]
 
-# Target column
+X = df.drop(columns=columns_to_drop)
+
+# Target
 y = df["label"]
 
-print(f"Features: {X.shape[1]}")
-print(f"Records: {X.shape[0]}")
+print("Number of Features:", X.shape[1])
 
 # Split Dataset
 X_train, X_test, y_train, y_test = train_test_split(
@@ -29,28 +38,28 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 print("Training Model...")
 
-# Train Random Forest
+# Random Forest
 model = RandomForestClassifier(
     n_estimators=100,
-    random_state=42
+    random_state=42,
+    n_jobs=-1
 )
 
 model.fit(X_train, y_train)
 
-print("Model Trained Successfully!")
+print("Model Training Complete!")
 
 # Prediction
 y_pred = model.predict(X_test)
 
-# Accuracy
 accuracy = accuracy_score(y_test, y_pred)
 
-print("\nAccuracy:", round(accuracy * 100, 2), "%")
+print(f"\nAccuracy: {accuracy*100:.2f}%")
 
 print("\nClassification Report:\n")
 print(classification_report(y_test, y_pred))
 
-# Save Model
+# Save model
 joblib.dump(model, "models/phishguard_model.pkl")
 
 print("\nModel Saved Successfully!")
