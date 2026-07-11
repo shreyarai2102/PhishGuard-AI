@@ -4,15 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HealthController {
+public class PhishController {
 
-    @GetMapping("/")
-    public String home() {
+    @GetMapping("/api/test")
+    public String test() {
         return "PhishGuard AI Backend Running!";
-    }
-
-    @GetMapping("/health")
-    public String health() {
-        return "Backend is Healthy!";
     }
 }
