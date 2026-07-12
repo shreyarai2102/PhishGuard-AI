@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "https://bug-free-lamp-pjp6994xpv49h9rjr-8080.app.github.dev/",
 });
 
 export default api;
