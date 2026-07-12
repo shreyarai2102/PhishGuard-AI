@@ -1,5 +1,6 @@
 package com.phishguard.backend.controller;
 
+import com.phishguard.backend.model.MlResponse;
 import com.phishguard.backend.model.UrlRequest;
 import com.phishguard.backend.service.PhishService;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,11 @@ public class PhishController {
 
     @GetMapping("/test")
     public String test() {
-        return "PhishGuard AI Backend Running!";
+        return "Backend Running";
     }
 
-     @PostMapping("/check")
-      public Object checkUrl(@RequestBody UrlRequest request) {
-    return phishService.checkUrl(request.getUrl());
+    @PostMapping("/check")
+    public MlResponse check(@RequestBody UrlRequest request) {
+        return phishService.checkUrl(request);
     }
 }

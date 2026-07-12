@@ -1,38 +1,30 @@
 package com.phishguard.backend.service;
 
-import com.phishguard.backend.features.UrlFeatureExtractor;
-import com.phishguard.backend.model.ScanResponse;
+import com.phishguard.backend.model.MlResponse;
+import com.phishguard.backend.model.UrlRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class PhishService {
 
-    private final UrlFeatureExtractor extractor = new UrlFeatureExtractor();
+    @Autowired
+    private RestTemplate restTemplate;
 
-    public ScanResponse checkUrl(String url) {
+    public MlResponse checkUrl(UrlRequest request) {
 
-        int score = 0;
+        String flaskUrl = "http://localhost:5000/predict";
 
-        if(!extractor.hasHttps(url))
-            score++;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        if(extractor.getUrlLength(url) > 50)
-            score++;
+        HttpEntity<UrlRequest> entity = new HttpEntity<>(request, headers);
 
-        if(extractor.countDots(url) > 3)
-            score++;
+        ResponseEntity<MlResponse> response =
+                restTemplate.postForEntity(flaskUrl, entity, MlResponse.class);
 
-        if(extractor.hasSuspiciousKeyword(url))
-            score++;
-
-        String prediction;
-
-        if(score >= 2) {
-            prediction = "PHISHING";
-        } else {
-            prediction = "SAFE";
-        }
-
-        return new ScanResponse(url, prediction, score);
+        return response.getBody();
     }
 }
