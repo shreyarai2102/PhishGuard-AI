@@ -25,6 +25,7 @@ def predict_url(url):
     confidence = model.predict_proba(X)[0].max() * 100
 
     return {
+        "url": url,
         "prediction": "PHISHING" if prediction == 1 else "SAFE",
         "confidence": round(float(confidence), 2)
     }
