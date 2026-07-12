@@ -13,7 +13,7 @@ function UrlScanner() {
     setLoading(true);
 
     try {
-      const response = await api.post("/api/check", {
+      const response = await api.post("/check", {
         url,
       });
 
